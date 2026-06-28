@@ -352,6 +352,21 @@ function renderCalendar(){
   grid.innerHTML = "";
 
   for(let i=0;i<first.getDay();i++){
+    const shortCode = {
+  "Acceleration & Power":"A",
+  "Strength Day":"S",
+  "Recovery Day":"R",
+  "Max Velocity":"M",
+  "Strength + Plyometrics":"P",
+  "Tempo / Rhythm":"T",
+  "Complete Rest":"•",
+  "Walk + Light Stretch":"W",
+  "Pool / Bike Recovery":"B",
+  "Light Mobility / Easy Movement":"L",
+  "Sprint Mechanics / Light Acceleration":"A"
+};
+
+const code = shortCode[plan.focus] || "";
     grid.innerHTML += `<div></div>`;
   }
 
@@ -369,7 +384,9 @@ function renderCalendar(){
       <div class="day ${today?'today':''} ${done}" onclick="openDay(new Date(${year},${month},${d}))">
         <div class="dayNum">${d}</div>
         <div class="dot ${type}"></div>
-        <div class="small">${log?.completed ? "Done" : plan.focus.split(" ")[0]}</div>
+        <div class="small" style="font-weight:bold;font-size:18px;">
+${log?.completed ? "✓" : code}
+</div>
       </div>
     `;
   }
