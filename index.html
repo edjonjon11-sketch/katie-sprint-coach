@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katie Sprint Coach Elite</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;
+  background:linear-gradient(to bottom,#02040a,#07111f);
+  color:white;
+}
+.app{
+  max-width:520px;
+  margin:auto;
+  padding:16px;
+  padding-bottom:95px;
+}
+.header{
+  padding:24px;
+  border-radius:26px;
+  background:linear-gradient(135deg,#0b63ff,#00d4ff);
+  margin-bottom:16px;
+  box-shadow:0 12px 35px rgba(0,0,0,.35);
+}
+h1{margin:0;font-size:30px}
+h2,h3{margin-top:0}
+.sub{opacity:.9;margin-top:6px}
+.card{
+  background:#10243d;
+  border:1px solid #1e3e63;
+  border-radius:22px;
+  padding:16px;
+  margin-bottom:14px;
+}
+.btn{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:15px;
+  color:white;
+  background:#0b63ff;
+  font-size:16px;
+  font-weight:bold;
+  margin-top:10px;
+}
+.good{background:#19a463}
+.warn{background:#ff9f0a}
+.danger{background:#d93636}
+.secondary{background:#243b55}
+.screen{display:none}
+.active{display:block}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:13px;
+  margin:6px 0;
+  font-size:15px;
+}
+textarea{min-height:85px}
+.item{
+  background:#0b1b30;
+  padding:12px;
+  border-radius:14px;
+  margin:8px 0;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.item input{
+  width:22px;
+  height:22px;
+}
+.progressbar{
+  height:15px;
+  background:#243b55;
+  border-radius:20px;
+  overflow:hidden;
+}
+.progressfill{
+  height:100%;
+  width:0%;
+  background:#19a463;
+}
+.statgrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.stat{
+  background:#0b1b30;
+  padding:14px;
+  border-radius:16px;
+  text-align:center;
+}
+.big{font-size:28px;font-weight:bold}
+.small{font-size:13px;color:#b8c7d9}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#07111f;
+  border-top:1px solid #1e3e63;
+  display:flex;
+  justify-content:space-around;
+  padding:8px 4px;
+}
+.nav button{
+  background:none;
+  border:0;
+  color:white;
+  font-size:12px;
+}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  background:#0b63ff;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">
+<h1>🏃 Katie Sprint Coach Elite</h1>
+<div class="sub">Training • Recovery • Coach Log • Progress</div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="card">
+    <span class="badge" id="phaseBadge">Build Phase</span>
+    <h2 id="todayTitle">Today</h2>
+    <p id="todayFocus"></p>
+
+    <div class="progressbar">
+      <div id="progressFill" class="progressfill"></div>
+    </div>
+    <p id="progressText" class="small"></p>
+
+    <button class="btn" onclick="showScreen('workout')">Start Today’s Plan</button>
+    <button class="btn secondary" onclick="showScreen('coach')">Log Coach Practice</button>
+  </div>
+
+  <div class="card">
+    <h3>Readiness Check</h3>
+    <p class="small">Use this before deciding how hard to train.</p>
+    <select id="sleep">
+      <option value="5">Sleep: Great</option>
+      <option value="4">Sleep: Good</option>
+      <option value="3">Sleep: Okay</option>
+      <option value="2">Sleep: Poor</option>
+      <option value="1">Sleep: Bad</option>
+    </select>
+    <select id="soreness">
+      <option value="5">Soreness: None</option>
+      <option value="4">Soreness: Light</option>
+      <option value="3">Soreness: Moderate</option>
+      <option value="2">Soreness: Heavy</option>
+      <option value="1">Soreness: Very Heavy</option>
+    </select>
+    <select id="energy">
+      <option value="5">Energy: High</option>
+      <option value="4">Energy: Good</option>
+      <option value="3">Energy: Okay</option>
+      <option value="2">Energy: Low</option>
+      <option value="1">Energy: Very Low</option>
+    </select>
+    <button class="btn good" onclick="saveReadiness()">Save Readiness</button>
+    <p id="readinessResult"></p>
+  </div>
+
+  <div class="card">
+    <h3>Weekly Structure</h3>
+    <p><b>Monday:</b> Acceleration & Power</p>
+    <p><b>Tuesday:</b> Strength</p>
+    <p><b>Wednesday:</b> Recovery Day</p>
+    <p><b>Thursday:</b> Max Velocity</p>
+    <p><b>Friday:</b> Strength + Plyometrics</p>
+    <p><b>Saturday:</b> Tempo / Rhythm</p>
+    <p><b>Sunday:</b> Complete Rest</p>
+  </div>
+</div>
+
+<!-- WORKOUT -->
+<div id="workout" class="screen">
+  <div class="card">
+    <h2 id="workoutTitle"></h2>
+    <p id="coachSuggestion" class="small"></p>
+    <div id="workoutList"></div>
+    <button class="btn good" onclick="completeDay()">Complete Day</button>
+    <button class="btn secondary" onclick="resetToday()">Reset Today</button>
+  </div>
+</div>
+
+<!-- COACH LOG -->
+<div id="coach" class="screen">
+  <div class="card">
+    <h2>Coach Practice Log</h2>
+    <p class="small">Use this when Katie trains with her outside coach.</p>
+
+    <select id="coachType">
+      <option>Speed</option>
+      <option>Acceleration</option>
+      <option>Speed Endurance</option>
+      <option>Tempo</option>
+      <option>Starts</option>
+      <option>Hurdles</option>
+      <option>Strength</option>
+      <option>Recovery</option>
+      <option>Race / Meet</option>
+    </select>
+
+    <select id="coachIntensity">
+      <option value="Easy">Easy</option>
+      <option value="Moderate">Moderate</option>
+      <option value="Hard">Hard</option>
+      <option value="Very Hard">Very Hard</option>
+    </select>
+
+    <input id="coachDuration" placeholder="Duration: 60 min, 90 min, 2 hours">
+    <textarea id="coachNotes" placeholder="Example: 5x300m, block starts, hurdle rhythm, etc."></textarea>
+
+    <button class="btn good" onclick="saveCoachLog()">Save Coach Practice</button>
+  </div>
+
+  <div class="card">
+    <h3>Recent Coach Logs</h3>
+    <div id="coachLogList"></div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div id="calendar" class="screen">
+  <div class="card">
+    <h2>July / August Build Phase</h2>
+    <p><b>Goal:</b> Build speed, mechanics, strength, and recovery.</p>
+  </div>
+
+  <div class="card">
+    <h3>Weekly Training Plan</h3>
+    <p><b>Mon:</b> 4x10m starts, 4x20m, 4x30m, 2x40m</p>
+    <p><b>Tue:</b> Squat, RDL, Hip Thrust, Split Squat, Rows, Core</p>
+    <p><b>Wed:</b> Pool, stretch, foam roll, no sprinting</p>
+    <p><b>Thu:</b> Flying 20s, Flying 30s, bounds, med ball throws</p>
+    <p><b>Fri:</b> Box jumps, broad jumps, pull-ups, push press, core</p>
+    <p><b>Sat:</b> 8x150m at 65–70%</p>
+    <p><b>Sun:</b> Complete rest</p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div id="progress" class="screen">
+  <div class="card">
+    <h2>Performance Dashboard</h2>
+    <div class="statgrid">
+      <div class="stat"><div class="big" id="daysDone">0</div><div class="small">Days Done</div></div>
+      <div class="stat"><div class="big" id="coachDays">0</div><div class="small">Coach Days</div></div>
+      <div class="stat"><div class="big" id="readinessAvg">0</div><div class="small">Avg Readiness</div></div>
+      <div class="stat"><div class="big" id="testsCount">0</div><div class="small">Tests</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Testing Log</h3>
+    <input id="testName" placeholder="Test: 30m, Flying 30, 150m, 300m">
+    <input id="testResult" placeholder="Result / Time">
+    <button class="btn good" onclick="saveTest()">Save Test</button>
+    <div id="testList"></div>
+  </div>
+</div>
+
+</div>
+
+<div class="nav">
+<button onclick="showScreen('home')">🏠 Home</button>
+<button onclick="showScreen('workout')">✅ Plan</button>
+<button onclick="showScreen('coach')">👟 Coach</button>
+<button onclick="showScreen('calendar')">📅 Calendar</button>
+<button onclick="showScreen('progress')">📊 Progress</button>
+</div>
+
+<script>
+const workouts = {
+0:{focus:"Complete Rest",list:["Sleep 9+ hours","Hydrate","No training","Light stretch only","Prepare for next week"]},
+1:{focus:"Acceleration & Power",list:["Dynamic warm-up","A-skips 2x20m","B-skips 2x20m","High knees 2x20m","4x10m starts","4x20m starts","4x30m starts","2x40m accelerations","Core","Stretch"]},
+2:{focus:"Strength Day",list:["Warm-up","Squats 3x8","RDL 3x8","Hip thrust 3x10","Bulgarian split squat 3x8","Rows 3x10","Pushups 3x12","Core","Stretch"]},
+3:{focus:"Recovery Day",list:["Pool or bike 20 minutes","Foam roll","Hip mobility","Calf mobility","Hamstring stretch","No sprinting","Sleep 9+ hours"]},
+4:{focus:"Max Velocity",list:["Warm-up","Drills","Flying 20s x6","Flying 30s x4","Straight-leg bounds","Medicine ball throws","Core","Stretch"]},
+5:{focus:"Strength + Plyometrics",list:["Warm-up","Box jumps 3x5","Broad jumps 3x5","Single-leg hops 3x5","Push press 3x6","Pull-ups","Core","Stretch"]},
+6:{focus:"Tempo / Race Rhythm",list:["Warm-up","8x150m at 65–70%","Walk recovery","Cooldown jog","Stretch","Foam roll"]}
+};
+
+function todayKey(){return new Date().toISOString().split("T")[0]}
+
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ loadToday();
+ loadCoachLogs();
+ loadProgress();
+}
+
+function loadToday(){
+ const d=new Date();
+ const day=d.getDay();
+ const w=workouts[day];
+ document.getElementById("todayTitle").innerText=d.toDateString();
+ document.getElementById("todayFocus").innerText="Today’s Focus: "+w.focus;
+ document.getElementById("workoutTitle").innerText=w.focus;
+
+ const saved=JSON.parse(localStorage.getItem(todayKey())||"{}");
+ let html="";
+ w.list.forEach((item,i)=>{
+   html+=`<label class="item"><input type="checkbox" ${saved[i]?"checked":""} onchange="saveCheck(${i},this.checked)"><span>${item}</span></label>`;
+ });
+ document.getElementById("workoutList").innerHTML=html;
+ updateProgressBar();
+ smartSuggestion();
+}
+
+function saveCheck(i,val){
+ let saved=JSON.parse(localStorage.getItem(todayKey())||"{}");
+ saved[i]=val;
+ localStorage.setItem(todayKey(),JSON.stringify(saved));
+ updateProgressBar();
+}
+
+function updateProgressBar(){
+ const day=new Date().getDay();
+ const total=workouts[day].list.length;
+ const saved=JSON.parse(localStorage.getItem(todayKey())||"{}");
+ const done=Object.values(saved).filter(Boolean).length;
+ const pct=Math.round((done/total)*100);
+ document.getElementById("progressFill").style.width=pct+"%";
+ document.getElementById("progressText").innerText=done+" of "+total+" completed ("+pct+"%)";
+}
+
+function completeDay(){
+ const day=new Date().getDay();
+ let saved={};
+ workouts[day].list.forEach((x,i)=>saved[i]=true);
+ localStorage.setItem(todayKey(),JSON.stringify(saved));
+
+ let completed=JSON.parse(localStorage.getItem("completedDays")||"[]");
+ if(!completed.includes(todayKey())) completed.push(todayKey());
+ localStorage.setItem("completedDays",JSON.stringify(completed));
+
+ loadToday();
+ loadProgress();
+ alert("Day completed. Great work Katie!");
+}
+
+function resetToday(){
+ localStorage.removeItem(todayKey());
+ loadToday();
+}
+
+function saveReadiness(){
+ const sleep=Number(document.getElementById("sleep").value);
+ const soreness=Number(document.getElementById("soreness").value);
+ const energy=Number(document.getElementById("energy").value);
+ const score=Math.round(((sleep+soreness+energy)/15)*100);
+
+ let logs=JSON.parse(localStorage.getItem("readiness")||"[]");
+ logs.push({date:todayKey(),score});
+ localStorage.setItem("readiness",JSON.stringify(logs));
+
+ let msg="Readiness Score: "+score+"%. ";
+ if(score>=80) msg+="Green light. Body looks ready.";
+ else if(score>=60) msg+="Moderate. Train smart.";
+ else msg+="Recovery warning. Consider reducing intensity.";
+
+ document.getElementById("readinessResult").innerText=msg;
+ loadProgress();
+}
+
+function saveCoachLog(){
+ const type=document.getElementById("coachType").value;
+ const intensity=document.getElementById("coachIntensity").value;
+ const duration=document.getElementById("coachDuration").value;
+ const notes=document.getElementById("coachNotes").value;
+
+ let logs=JSON.parse(localStorage.getItem("coachLogs")||"[]");
+ logs.unshift({date:todayKey(),type,intensity,duration,notes});
+ localStorage.setItem("coachLogs",JSON.stringify(logs));
+
+ document.getElementById("coachDuration").value="";
+ document.getElementById("coachNotes").value="";
+ loadCoachLogs();
+ alert("Coach practice saved.");
+}
+
+function loadCoachLogs(){
+ const logs=JSON.parse(localStorage.getItem("coachLogs")||"[]");
+ document.getElementById("coachLogList").innerHTML=logs.slice(0,8).map(l=>`
+ <div class="item" style="display:block">
+ <b>${l.date}</b><br>
+ ${l.type} • ${l.intensity}<br>
+ <span class="small">${l.duration}</span><br>
+ <span class="small">${l.notes}</span>
+ </div>`).join("") || "<p class='small'>No coach practices logged yet.</p>";
+}
+
+function smartSuggestion(){
+ const logs=JSON.parse(localStorage.getItem("coachLogs")||"[]");
+ const recent=logs[0];
+ let suggestion="";
+
+ if(recent && recent.date===todayKey()){
+   suggestion="Coach practice logged today. Do not double up hard work unless coach approves.";
+ } else if(recent && (recent.intensity==="Hard" || recent.intensity==="Very Hard")){
+   suggestion="Recent coach practice was hard. Consider lighter strength, mobility, or recovery.";
+ } else {
+   suggestion="Follow today’s plan, but adjust if soreness or energy is low.";
+ }
+
+ document.getElementById("coachSuggestion").innerText=suggestion;
+}
+
+function saveTest(){
+ const name=document.getElementById("testName").value;
+ const result=document.getElementById("testResult").value;
+ if(!name || !result){alert("Enter test and result.");return}
+
+ let tests=JSON.parse(localStorage.getItem("tests")||"[]");
+ tests.unshift({date:todayKey(),name,result});
+ localStorage.setItem("tests",JSON.stringify(tests));
+
+ document.getElementById("testName").value="";
+ document.getElementById("testResult").value="";
+ loadProgress();
+}
+
+function loadProgress(){
+ const completed=JSON.parse(localStorage.getItem("completedDays")||"[]");
+ const coachLogs=JSON.parse(localStorage.getItem("coachLogs")||"[]");
+ const readiness=JSON.parse(localStorage.getItem("readiness")||"[]");
+ const tests=JSON.parse(localStorage.getItem("tests")||"[]");
+
+ document.getElementById("daysDone").innerText=completed.length;
+ document.getElementById("coachDays").innerText=coachLogs.length;
+ document.getElementById("testsCount").innerText=tests.length;
+
+ let avg=0;
+ if(readiness.length){
+   avg=Math.round(readiness.reduce((a,b)=>a+b.score,0)/readiness.length);
+ }
+ document.getElementById("readinessAvg").innerText=avg+"%";
+
+ document.getElementById("testList").innerHTML=tests.map(t=>`
+ <div class="item" style="display:block">
+ <b>${t.date}</b><br>${t.name}: ${t.result}
+ </div>`).join("") || "<p class='small'>No tests saved yet.</p>";
+}
+
+loadToday();
+loadCoachLogs();
+loadProgress();
+</script>
+
+</body>
+</html>
