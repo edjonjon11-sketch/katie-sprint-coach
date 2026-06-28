@@ -609,24 +609,27 @@ ${l.notes}
 
   function toggleLog(i){
 
-const details=document.getElementById("details"+i);
-const arrow=document.getElementById("arrow"+i);
+const details = document.getElementById("details"+i);
+const arrow = document.getElementById("arrow"+i);
 
-if(details.style.display==="none"){
+if(!details || !arrow) return;
 
-details.style.display="block";
-arrow.innerHTML="▲";
+if(details.style.display==="none" || details.style.display===""){
+
+    details.style.display="block";
+    arrow.innerHTML="▲";
 
 }else{
 
-details.style.display="none";
-arrow.innerHTML="▼";
+    details.style.display="none";
+    arrow.innerHTML="▼";
 
 }
 
 }
   
 renderCalendar();
+loadProgress();
 </script>
 
 </body>
