@@ -352,7 +352,8 @@ function renderCalendar(){
   grid.innerHTML = "";
 
   for(let i=0;i<first.getDay();i++){
-    const shortCode = {
+    
+  const shortCode = {
   "Acceleration & Power":"A",
   "Strength Day":"S",
   "Recovery Day":"R",
@@ -367,6 +368,7 @@ function renderCalendar(){
 };
 
 const code = shortCode[plan.focus] || "";
+    
     grid.innerHTML += `<div></div>`;
   }
 
@@ -381,14 +383,19 @@ const code = shortCode[plan.focus] || "";
     let done = log?.completed ? "done" : "";
 
     grid.innerHTML += `
-      <div class="day ${today?'today':''} ${done}" onclick="openDay(new Date(${year},${month},${d}))">
-        <div class="dayNum">${d}</div>
-        <div class="dot ${type}"></div>
-        <div class="small" style="font-weight:bold;font-size:18px;">
+<div class="day ${today?'today':''} ${done}"
+onclick="openDay(new Date(${year},${month},${d}))">
+
+<div class="dayNum">${d}</div>
+
+<div class="dot ${type}"></div>
+
+<div class="small">
 ${log?.completed ? "✓" : code}
 </div>
-      </div>
-    `;
+
+</div>
+`;
   }
 }
 
