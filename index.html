@@ -352,8 +352,16 @@ function renderCalendar(){
   grid.innerHTML = "";
 
   for(let i=0;i<first.getDay();i++){
-    
-  const shortCode = {
+    grid.innerHTML += `<div></div>`;
+  }
+
+  for(let d=1; d<=last.getDate(); d++){
+    const dayDate = new Date(year, month, d);
+    const key = dateKey(dayDate);
+    const plan = getPlan(dayDate);
+    const log = getLogForDate(key);
+    const today = dateKey(new Date()) === key;
+    const shortCode = {
   "Acceleration & Power":"A",
   "Strength Day":"S",
   "Recovery Day":"R",
@@ -368,17 +376,6 @@ function renderCalendar(){
 };
 
 const code = shortCode[plan.focus] || "";
-    
-    grid.innerHTML += `<div></div>`;
-  }
-
-  for(let d=1; d<=last.getDate(); d++){
-    const dayDate = new Date(year, month, d);
-    const key = dateKey(dayDate);
-    const plan = getPlan(dayDate);
-    const log = getLogForDate(key);
-    const today = dateKey(new Date()) === key;
-
     let type = log?.coach ? "coach" : plan.type;
     let done = log?.completed ? "done" : "";
 
