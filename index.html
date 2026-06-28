@@ -551,15 +551,81 @@ function loadProgress(){
   document.getElementById("progressSummary").innerHTML =
     `Days Completed: <b>${completed}</b><br>Coach Practices: <b>${coach}</b><br>Average Readiness: <b>${avg}%</b>`;
 
-  document.getElementById("recentLogs").innerHTML = logs.slice(0,10).map(l=>`
-    <div class="step">
-      <b>${l.date}</b><br>
-      ${l.coach ? "Coach Practice: "+l.coachType+" • "+l.intensity : l.focus}<br>
-      <span class="small">${l.notes || l.duration || ""}</span>
-    </div>
-  `).join("") || "<p class='small'>No logs yet.</p>";
+  document.getElementById("recentLogs").innerHTML = logs.slice(0,10).map((l,i)=>`
+<div class="step">
+
+<div
+onclick="toggleLog(${i})"
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+">
+
+<div>
+<b>${l.date}</b><br>
+${l.coach ? "👟 Coach Practice" : "🏃 " + l.focus}
+</div>
+
+<div id="arrow${i}">▼</div>
+
+</div>
+
+<div
+id="details${i}"
+style="display:none;margin-top:15px;">
+
+<p><b>Workout</b><br>
+${l.coach ? l.coachType : l.focus}
+</p>
+
+${l.intensity ? `
+<p><b>Intensity</b><br>
+${l.intensity}
+</p>` : ""}
+
+${l.readiness ? `
+<p><b>Readiness</b><br>
+${l.readiness}%
+</p>` : ""}
+
+${l.duration ? `
+<p><b>Duration</b><br>
+${l.duration}
+</p>` : ""}
+
+${l.notes ? `
+<p><b>Notes</b><br>
+${l.notes}
+</p>` : ""}
+
+</div>
+
+</div>
+`).join("") || "<p class='small'>No logs yet.</p>";
 }
 
+
+  function toggleLog(i){
+
+const details=document.getElementById("details"+i);
+const arrow=document.getElementById("arrow"+i);
+
+if(details.style.display==="none"){
+
+details.style.display="block";
+arrow.innerHTML="▲";
+
+}else{
+
+details.style.display="none";
+arrow.innerHTML="▼";
+
+}
+
+}
+  
 renderCalendar();
 </script>
 
