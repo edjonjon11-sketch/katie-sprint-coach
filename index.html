@@ -600,6 +600,13 @@ ${l.notes ? `
 ${l.notes}
 </p>` : ""}
 
+<button
+class="btn"
+style="background:#d93636;margin-top:15px;"
+onclick="deleteLog('${l.date}')">
+🗑 Delete Log
+</button>
+
 </div>
 
 </div>
@@ -625,6 +632,23 @@ if(details.style.display==="none" || details.style.display===""){
     arrow.innerHTML="▼";
 
 }
+
+}
+
+
+  function deleteLog(date){
+
+if(!confirm("Delete this log?")) return;
+
+let logs = getLogs();
+
+logs = logs.filter(l => l.date !== date);
+
+saveLogs(logs);
+
+loadProgress();
+
+alert("Log deleted.");
 
 }
   
