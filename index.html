@@ -3,67 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Katie Sprint Coach Elite</title>
+<title>Katie Sprint Coach</title>
 
 <style>
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;
-  background:linear-gradient(to bottom,#02040a,#07111f);
+  background:#050914;
   color:white;
 }
-.app{max-width:520px;margin:auto;padding:16px;padding-bottom:95px}
+.app{
+  max-width:520px;
+  margin:auto;
+  padding:16px;
+  padding-bottom:90px;
+}
 .header{
-  padding:24px;border-radius:26px;
-  background:linear-gradient(135deg,#0b63ff,#00d4ff);
+  padding:22px;
+  border-radius:24px;
+  background:linear-gradient(135deg,#2667ff,#5bd8ff);
   margin-bottom:16px;
 }
-h1{margin:0;font-size:29px}
-h2,h3{margin-top:0}
+h1{margin:0;font-size:28px}
 .sub{opacity:.9;margin-top:6px}
 .card{
-  background:#10243d;border:1px solid #1e3e63;
-  border-radius:22px;padding:16px;margin-bottom:14px;
+  background:#101d33;
+  border:1px solid #243b61;
+  border-radius:22px;
+  padding:16px;
+  margin-bottom:14px;
 }
-.btn{
-  width:100%;padding:14px;border:0;border-radius:15px;
-  color:white;background:#0b63ff;font-size:16px;
-  font-weight:bold;margin-top:10px;
-}
-.good{background:#19a463}
-.secondary{background:#243b55}
-.warn{background:#ff9f0a}
 .screen{display:none}
 .active{display:block}
+.btn{
+  width:100%;
+  border:0;
+  padding:15px;
+  border-radius:16px;
+  background:#2667ff;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  margin-top:10px;
+}
+.secondary{background:#243b55}
+.good{background:#23a55a}
+.warn{background:#ff9f0a}
 input,select,textarea{
-  width:100%;padding:13px;border:0;border-radius:13px;
-  margin:6px 0;font-size:15px;
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:14px;
+  margin:7px 0;
+  font-size:15px;
 }
-textarea{min-height:85px}
-.item{
-  background:#0b1b30;padding:12px;border-radius:14px;
-  margin:8px 0;display:flex;gap:10px;align-items:center;
+textarea{min-height:90px}
+.calendarTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-.item input{width:22px;height:22px}
-.progressbar{
-  height:15px;background:#243b55;border-radius:20px;overflow:hidden;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
 }
-.progressfill{height:100%;width:0%;background:#19a463}
-.badge{
-  display:inline-block;padding:6px 10px;border-radius:20px;
-  background:#0b63ff;font-size:12px;margin-bottom:8px;
+.dayName{
+  text-align:center;
+  color:#9fb3ce;
+  font-size:13px;
 }
-.small{font-size:13px;color:#b8c7d9}
-.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:#0b1b30;padding:14px;border-radius:16px;text-align:center}
-.big{font-size:28px;font-weight:bold}
+.day{
+  background:#0b1628;
+  border:1px solid #1d3558;
+  border-radius:14px;
+  min-height:68px;
+  padding:7px;
+  text-align:center;
+}
+.day.today{
+  border:2px solid #5bd8ff;
+}
+.day.done{
+  background:#12351f;
+}
+.dayNum{font-weight:bold;font-size:18px}
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  margin:7px auto 0;
+}
+.recovery{background:#23a55a}
+.training{background:#2667ff}
+.coach{background:#a855f7}
+.rest{background:#6b7280}
+.warning{background:#ff9f0a}
+.small{font-size:13px;color:#b9c6d6}
+.step{
+  background:#0b1628;
+  padding:16px;
+  border-radius:18px;
+  margin-top:12px;
+}
 .nav{
-  position:fixed;bottom:0;left:0;right:0;background:#07111f;
-  border-top:1px solid #1e3e63;display:flex;
-  justify-content:space-around;padding:8px 4px;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#07111f;
+  border-top:1px solid #243b61;
+  display:flex;
+  justify-content:space-around;
+  padding:9px 4px;
 }
-.nav button{background:none;border:0;color:white;font-size:12px}
+.nav button{
+  background:none;
+  border:0;
+  color:white;
+  font-size:13px;
+}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  background:#2667ff;
+  font-size:12px;
+}
 </style>
 </head>
 
@@ -72,69 +139,62 @@ textarea{min-height:85px}
 <div class="app">
 
 <div class="header">
-<h1>🏃 Katie Sprint Coach Elite</h1>
-<div class="sub">Recovery • Coach Log • Speed • Progress</div>
+<h1>🏃 Katie Sprint Coach</h1>
+<div class="sub">Calendar • Coach Log • Recovery • Progress</div>
 </div>
 
-<div id="home" class="screen active">
+<!-- CALENDAR -->
+<div id="calendarScreen" class="screen active">
   <div class="card">
-    <span class="badge" id="phaseBadge"></span>
-    <h2 id="todayTitle"></h2>
-    <p id="todayFocus"></p>
-    <p id="phaseMessage" class="small"></p>
-
-    <div class="progressbar">
-      <div id="progressFill" class="progressfill"></div>
+    <div class="calendarTop">
+      <button class="btn secondary" style="width:70px" onclick="changeMonth(-1)">‹</button>
+      <h2 id="monthTitle"></h2>
+      <button class="btn secondary" style="width:70px" onclick="changeMonth(1)">›</button>
     </div>
-    <p id="progressText" class="small"></p>
 
-    <button class="btn" onclick="showScreen('workout')">Start Today’s Plan</button>
-    <button class="btn secondary" onclick="showScreen('coach')">Log Coach Practice</button>
+    <div class="grid">
+      <div class="dayName">Sun</div>
+      <div class="dayName">Mon</div>
+      <div class="dayName">Tue</div>
+      <div class="dayName">Wed</div>
+      <div class="dayName">Thu</div>
+      <div class="dayName">Fri</div>
+      <div class="dayName">Sat</div>
+    </div>
+
+    <div id="calendarGrid" class="grid"></div>
   </div>
 
   <div class="card">
-    <h3>Readiness Check</h3>
-    <select id="sleep">
-      <option value="5">Sleep: Great</option>
-      <option value="4">Sleep: Good</option>
-      <option value="3">Sleep: Okay</option>
-      <option value="2">Sleep: Poor</option>
-      <option value="1">Sleep: Bad</option>
-    </select>
-    <select id="soreness">
-      <option value="5">Soreness: None</option>
-      <option value="4">Soreness: Light</option>
-      <option value="3">Soreness: Moderate</option>
-      <option value="2">Soreness: Heavy</option>
-      <option value="1">Soreness: Very Heavy</option>
-    </select>
-    <select id="energy">
-      <option value="5">Energy: High</option>
-      <option value="4">Energy: Good</option>
-      <option value="3">Energy: Okay</option>
-      <option value="2">Energy: Low</option>
-      <option value="1">Energy: Very Low</option>
-    </select>
-    <button class="btn good" onclick="saveReadiness()">Save Readiness</button>
-    <p id="readinessResult"></p>
+    <h3>Color Key</h3>
+    <p>🟢 Recovery / Rest</p>
+    <p>🔵 Training Day</p>
+    <p>🟣 Coach Practice Logged</p>
+    <p>🟠 Adjusted / Caution</p>
   </div>
 </div>
 
-<div id="workout" class="screen">
+<!-- DAY DETAIL -->
+<div id="dayScreen" class="screen">
   <div class="card">
-    <span class="badge" id="workoutPhase"></span>
-    <h2 id="workoutTitle"></h2>
-    <p id="coachSuggestion" class="small"></p>
-    <div id="workoutList"></div>
-    <button class="btn good" onclick="completeDay()">Complete Day</button>
-    <button class="btn secondary" onclick="resetToday()">Reset Today</button>
+    <span class="badge" id="dayPhase"></span>
+    <h2 id="selectedDateTitle"></h2>
+    <p id="dayFocus"></p>
+    <p id="smartAdvice" class="small"></p>
+
+    <button class="btn" onclick="startSession()">Start Today</button>
+    <button class="btn secondary" onclick="showCoachLog()">Log Coach Practice</button>
+    <button class="btn secondary" onclick="showScreen('calendarScreen')">Back to Calendar</button>
   </div>
+
+  <div id="sessionArea"></div>
 </div>
 
-<div id="coach" class="screen">
+<!-- COACH LOG -->
+<div id="coachScreen" class="screen">
   <div class="card">
-    <h2>Coach Practice Log</h2>
-    <p class="small">Use this when Katie trains with an outside coach.</p>
+    <h2>Log Coach Practice</h2>
+    <p id="coachDateText" class="small"></p>
 
     <select id="coachType">
       <option>Speed</option>
@@ -156,325 +216,330 @@ textarea{min-height:85px}
     </select>
 
     <input id="coachDuration" placeholder="Duration: 60 min, 90 min, 2 hours">
-    <textarea id="coachNotes" placeholder="Example: 5x300m, block starts, hurdle rhythm, etc."></textarea>
-    <button class="btn good" onclick="saveCoachLog()">Save Coach Practice</button>
-  </div>
+    <textarea id="coachNotes" placeholder="What did she do? Example: 5x300m, blocks, hurdles, flying 30s."></textarea>
 
-  <div class="card">
-    <h3>Recent Coach Logs</h3>
-    <div id="coachLogList"></div>
+    <button class="btn good" onclick="saveCoachLog()">Save Practice</button>
+    <button class="btn secondary" onclick="openDay(selectedDate)">Back</button>
   </div>
 </div>
 
-<div id="calendar" class="screen">
+<!-- PROGRESS -->
+<div id="progressScreen" class="screen">
   <div class="card">
-    <h2>Season Roadmap</h2>
-    <p><b>June 28 – July 7:</b> Post-season recovery</p>
-    <p><b>July 8 – July 20:</b> Light rebuild</p>
-    <p><b>July 21 – July 27:</b> Transition week</p>
-    <p><b>July 28 – August 31:</b> Speed + strength build phase</p>
+    <h2>Progress</h2>
+    <p id="progressSummary"></p>
   </div>
 
   <div class="card">
-    <h3>Important Rule</h3>
-    <p>No sprinting or hard lifting during the first 7–10 days after her last race.</p>
-    <p>Recovery comes first so her body can reset before the next training block.</p>
-  </div>
-</div>
-
-<div id="progress" class="screen">
-  <div class="card">
-    <h2>Performance Dashboard</h2>
-    <div class="statgrid">
-      <div class="stat"><div class="big" id="daysDone">0</div><div class="small">Days Done</div></div>
-      <div class="stat"><div class="big" id="coachDays">0</div><div class="small">Coach Days</div></div>
-      <div class="stat"><div class="big" id="readinessAvg">0%</div><div class="small">Avg Readiness</div></div>
-      <div class="stat"><div class="big" id="testsCount">0</div><div class="small">Tests</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Testing Log</h3>
-    <input id="testName" placeholder="Test: 30m, Flying 30, 150m, 300m">
-    <input id="testResult" placeholder="Result / Time">
-    <button class="btn good" onclick="saveTest()">Save Test</button>
-    <div id="testList"></div>
+    <h3>Recent Logs</h3>
+    <div id="recentLogs"></div>
   </div>
 </div>
 
 </div>
 
 <div class="nav">
-<button onclick="showScreen('home')">🏠 Home</button>
-<button onclick="showScreen('workout')">✅ Plan</button>
-<button onclick="showScreen('coach')">👟 Coach</button>
-<button onclick="showScreen('calendar')">📅 Calendar</button>
-<button onclick="showScreen('progress')">📊 Progress</button>
+<button onclick="showScreen('calendarScreen')">📅 Calendar</button>
+<button onclick="openDay(new Date())">▶ Today</button>
+<button onclick="showScreen('progressScreen');loadProgress()">📊 Progress</button>
 </div>
 
 <script>
+let viewDate = new Date();
+let selectedDate = new Date();
+
 const startDate = new Date("2026-06-28T00:00:00");
 
-const weeklyBuild = {
-0:{focus:"Complete Rest",list:["Sleep 9+ hours","Hydrate","No training","Light stretch only"]},
-1:{focus:"Acceleration & Power",list:["Dynamic warm-up","A-skips 2x20m","B-skips 2x20m","4x10m starts","4x20m starts","4x30m starts","Core","Stretch"]},
-2:{focus:"Strength Day",list:["Warm-up","Squats 3x8","RDL 3x8","Hip thrust 3x10","Rows 3x10","Core","Stretch"]},
-3:{focus:"Recovery Day",list:["Pool or bike 20 minutes","Foam roll","Hip mobility","No sprinting","Sleep 9+ hours"]},
-4:{focus:"Max Velocity",list:["Warm-up","Drills","Flying 20s x6","Flying 30s x4","Bounds","Med ball throws","Stretch"]},
-5:{focus:"Strength + Plyometrics",list:["Warm-up","Box jumps 3x5","Broad jumps 3x5","Push press 3x6","Pull-ups","Core"]},
-6:{focus:"Tempo / Rhythm",list:["Warm-up","8x150m at 65–70%","Walk recovery","Cooldown","Stretch"]}
-};
-
-const recoveryPlan = [
-{focus:"Complete Rest",list:["No training","Hydrate","Eat well","Sleep 9–10 hours","Light walk only if needed"]},
-{focus:"Recovery Walk + Stretch",list:["Walk 20–30 minutes","Light stretching 10–15 minutes","Foam roll lightly","Hydrate","No sprinting"]},
-{focus:"Complete Rest",list:["No training","Mobility only if needed","Hydrate","Sleep 9–10 hours"]},
-{focus:"Pool / Bike Recovery",list:["Easy pool or bike 20–30 minutes","Hip mobility","Calf mobility","Light stretching","No sprinting"]},
-{focus:"Complete Rest",list:["No training","Foam roll lightly","Hydrate","Protein-rich meals","Sleep"]},
-{focus:"Walk + Stretch",list:["Walk 20 minutes","Stretch 10 minutes","Foam roll lightly","No sprinting","No lifting"]},
-{focus:"Complete Rest",list:["Family day","No track","Hydrate","Sleep 9–10 hours"]},
-{focus:"Mobility Reset",list:["Easy mobility 15 minutes","Light core 8 minutes","Walk 15 minutes","No sprinting"]},
-{focus:"Easy Bike / Pool",list:["Bike or pool 20 minutes easy","Stretch","Foam roll","Hydrate"]},
-{focus:"Rest + Body Check",list:["Check soreness","Check energy","No sprinting","Sleep 9+ hours"]}
-];
-
-const lightRebuild = {
-0:{focus:"Complete Rest",list:["No training","Hydrate","Sleep 9+ hours"]},
-1:{focus:"Mobility + Core",list:["Dynamic mobility","Dead bug 3x10","Plank 3x30 sec","Glute bridge 3x12","Stretch"]},
-2:{focus:"Bodyweight Strength",list:["Bodyweight squats 3x10","Lunges 3x8","Pushups 3x8","Calf raises 3x15","Core"]},
-3:{focus:"Recovery Day",list:["Pool or bike easy 20 minutes","Foam roll","Stretch","No sprinting"]},
-4:{focus:"Drill Day",list:["A-skips 2x20m","B-skips 2x20m","High knees 2x20m","4x60m relaxed strides at 60%","Stretch"]},
-5:{focus:"Light Strength",list:["Glute bridges","Step-ups","Rows","Pushups","Core","Stretch"]},
-6:{focus:"Easy Tempo",list:["Warm-up","6x100m relaxed at 60%","Walk back recovery","Stretch"]}
-};
-
-const transitionWeek = {
-0:{focus:"Complete Rest",list:["No training","Hydrate","Sleep"]},
-1:{focus:"Light Acceleration",list:["Warm-up","A-skips","B-skips","4x10m starts at 70%","4x20m accelerations at 70%","Stretch"]},
-2:{focus:"Light Strength",list:["Squat pattern 3x8","RDL pattern 3x8","Hip thrust 3x10","Core","Stretch"]},
-3:{focus:"Recovery Day",list:["Pool or bike 20 minutes","Foam roll","Mobility","No sprinting"]},
-4:{focus:"Speed Mechanics",list:["Warm-up","Drills","4x60m relaxed strides","Wicket rhythm optional","Stretch"]},
-5:{focus:"Plyo Intro",list:["Pogo jumps 3x10","Broad jumps 3x4","Step-ups","Core","Stretch"]},
-6:{focus:"Tempo Intro",list:["6x150m at 60–65%","Walk recovery","Cooldown","Stretch"]}
-};
-
-function daysFromStart(){
- const today = new Date();
- const cleanToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
- const cleanStart = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
- return Math.floor((cleanToday - cleanStart) / (1000*60*60*24));
+function dateKey(d){
+  return d.toISOString().split("T")[0];
 }
 
-function getTodayPlan(){
- const day = new Date().getDay();
- const diff = daysFromStart();
-
- if(diff >= 0 && diff <= 9){
-   return {
-     phase:"Post-Season Recovery",
-     message:"Recovery overrides normal training. No sprinting or hard lifting.",
-     plan:recoveryPlan[diff]
-   };
- }
-
- if(diff >= 10 && diff <= 22){
-   return {
-     phase:"Light Rebuild",
-     message:"Begin waking the body back up. Keep intensity low.",
-     plan:lightRebuild[day]
-   };
- }
-
- if(diff >= 23 && diff <= 29){
-   return {
-     phase:"Transition Week",
-     message:"Reintroduce sprint mechanics and light acceleration.",
-     plan:transitionWeek[day]
-   };
- }
-
- return {
-   phase:"Speed + Strength Build",
-   message:"Normal off-season build phase. Adjust if coach practice was hard.",
-   plan:weeklyBuild[day]
- };
+function daysFromStart(d){
+  const clean = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  return Math.floor((clean - start) / (1000*60*60*24));
 }
 
-function todayKey(){
- return new Date().toISOString().split("T")[0];
+function getPlan(d){
+  const diff = daysFromStart(d);
+  const day = d.getDay();
+
+  if(diff >= 0 && diff <= 9){
+    const recovery = [
+      "Complete Rest",
+      "Walk + Light Stretch",
+      "Complete Rest",
+      "Pool / Bike Recovery",
+      "Complete Rest",
+      "Walk + Stretch",
+      "Complete Rest",
+      "Mobility Reset",
+      "Easy Bike / Pool",
+      "Rest + Body Check"
+    ];
+    return {
+      phase:"Post-Season Recovery",
+      type:"recovery",
+      focus:recovery[diff] || "Recovery",
+      work:["Sleep 9–10 hours","Hydrate","Eat well","No sprinting","No hard lifting"]
+    };
+  }
+
+  if(diff >= 10 && diff <= 22){
+    return {
+      phase:"Light Rebuild",
+      type: day===0 || day===3 ? "recovery":"training",
+      focus: day===3 ? "Recovery Day" : "Light Mobility / Easy Movement",
+      work:["Mobility","Light core","Easy bike/walk","Stretch","No max sprinting"]
+    };
+  }
+
+  if(diff >= 23 && diff <= 29){
+    return {
+      phase:"Transition Week",
+      type: day===0 || day===3 ? "recovery":"training",
+      focus:"Sprint Mechanics / Light Acceleration",
+      work:["Warm-up","A-skips","B-skips","4x20m at 70%","Stretch"]
+    };
+  }
+
+  const week = {
+    0:["Complete Rest","recovery",["Sleep","Hydrate","No training"]],
+    1:["Acceleration & Power","training",["Warm-up","4x10m starts","4x20m starts","4x30m starts","Core","Stretch"]],
+    2:["Strength Day","training",["Warm-up","Squats","RDL","Hip thrust","Rows","Core"]],
+    3:["Recovery Day","recovery",["Pool or bike","Foam roll","Mobility","No sprinting"]],
+    4:["Max Velocity","training",["Warm-up","Flying 20s","Flying 30s","Bounds","Stretch"]],
+    5:["Strength + Plyometrics","training",["Box jumps","Broad jumps","Push press","Pull-ups","Core"]],
+    6:["Tempo / Rhythm","training",["Warm-up","8x150m at 65–70%","Cooldown","Stretch"]]
+  };
+
+  return {
+    phase:"Speed + Strength Build",
+    type:week[day][1],
+    focus:week[day][0],
+    work:week[day][2]
+  };
+}
+
+function getLogs(){
+  return JSON.parse(localStorage.getItem("logs") || "[]");
+}
+
+function saveLogs(logs){
+  localStorage.setItem("logs", JSON.stringify(logs));
+}
+
+function getLogForDate(key){
+  return getLogs().find(l=>l.date===key);
 }
 
 function showScreen(id){
- document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- loadToday();
- loadCoachLogs();
- loadProgress();
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  renderCalendar();
 }
 
-function loadToday(){
- const data = getTodayPlan();
- const plan = data.plan;
- const d = new Date();
+function renderCalendar(){
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
 
- document.getElementById("phaseBadge").innerText = data.phase;
- document.getElementById("workoutPhase").innerText = data.phase;
- document.getElementById("todayTitle").innerText = d.toDateString();
- document.getElementById("todayFocus").innerText = "Today’s Focus: " + plan.focus;
- document.getElementById("phaseMessage").innerText = data.message;
- document.getElementById("workoutTitle").innerText = plan.focus;
+  document.getElementById("monthTitle").innerText =
+    viewDate.toLocaleString("default",{month:"long"}) + " " + year;
 
- const saved = JSON.parse(localStorage.getItem(todayKey()) || "{}");
- let html = "";
- plan.list.forEach((item,i)=>{
-   html += `<label class="item">
-   <input type="checkbox" ${saved[i]?"checked":""} onchange="saveCheck(${i},this.checked)">
-   <span>${item}</span>
-   </label>`;
- });
- document.getElementById("workoutList").innerHTML = html;
+  const first = new Date(year, month, 1);
+  const last = new Date(year, month+1, 0);
+  const grid = document.getElementById("calendarGrid");
+  grid.innerHTML = "";
 
- updateProgressBar();
- smartSuggestion();
+  for(let i=0;i<first.getDay();i++){
+    grid.innerHTML += `<div></div>`;
+  }
+
+  for(let d=1; d<=last.getDate(); d++){
+    const dayDate = new Date(year, month, d);
+    const key = dateKey(dayDate);
+    const plan = getPlan(dayDate);
+    const log = getLogForDate(key);
+    const today = dateKey(new Date()) === key;
+
+    let type = log?.coach ? "coach" : plan.type;
+    let done = log?.completed ? "done" : "";
+
+    grid.innerHTML += `
+      <div class="day ${today?'today':''} ${done}" onclick="openDay(new Date(${year},${month},${d}))">
+        <div class="dayNum">${d}</div>
+        <div class="dot ${type}"></div>
+        <div class="small">${log?.completed ? "Done" : plan.focus.split(" ")[0]}</div>
+      </div>
+    `;
+  }
 }
 
-function saveCheck(i,val){
- let saved = JSON.parse(localStorage.getItem(todayKey()) || "{}");
- saved[i] = val;
- localStorage.setItem(todayKey(), JSON.stringify(saved));
- updateProgressBar();
+function changeMonth(num){
+  viewDate.setMonth(viewDate.getMonth()+num);
+  renderCalendar();
 }
 
-function updateProgressBar(){
- const plan = getTodayPlan().plan;
- const total = plan.list.length;
- const saved = JSON.parse(localStorage.getItem(todayKey()) || "{}");
- const done = Object.values(saved).filter(Boolean).length;
- const pct = Math.round((done/total)*100);
- document.getElementById("progressFill").style.width = pct + "%";
- document.getElementById("progressText").innerText = done + " of " + total + " completed (" + pct + "%)";
+function openDay(d){
+  selectedDate = d;
+  const key = dateKey(d);
+  const plan = getPlan(d);
+  const log = getLogForDate(key);
+  const advice = getSmartAdvice(d);
+
+  document.getElementById("selectedDateTitle").innerText =
+    d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+
+  document.getElementById("dayPhase").innerText = plan.phase;
+  document.getElementById("dayFocus").innerText =
+    log?.coach ? "Coach Practice: " + log.coachType : "Today's Focus: " + plan.focus;
+
+  document.getElementById("smartAdvice").innerText = advice;
+  document.getElementById("sessionArea").innerHTML = "";
+
+  showScreen("dayScreen");
 }
 
-function completeDay(){
- const plan = getTodayPlan().plan;
- let saved = {};
- plan.list.forEach((x,i)=>saved[i]=true);
- localStorage.setItem(todayKey(), JSON.stringify(saved));
+function getSmartAdvice(d){
+  const logs = getLogs();
+  const yesterday = new Date(d);
+  yesterday.setDate(yesterday.getDate()-1);
+  const yLog = getLogForDate(dateKey(yesterday));
 
- let completed = JSON.parse(localStorage.getItem("completedDays") || "[]");
- if(!completed.includes(todayKey())) completed.push(todayKey());
- localStorage.setItem("completedDays", JSON.stringify(completed));
+  const twoDays = new Date(d);
+  twoDays.setDate(twoDays.getDate()-2);
+  const twoLog = getLogForDate(dateKey(twoDays));
 
- loadToday();
- loadProgress();
- alert("Day completed. Great work Katie!");
+  const plan = getPlan(d);
+
+  if(plan.phase === "Post-Season Recovery"){
+    return "Recovery overrides normal training. No sprinting or hard lifting.";
+  }
+
+  if(yLog && yLog.coach && (yLog.intensity==="Hard" || yLog.intensity==="Very Hard")){
+    return "Yesterday was a hard coach practice. Reduce today’s intensity and focus on recovery or lighter quality work.";
+  }
+
+  if(twoLog && twoLog.coach && twoLog.intensity==="Very Hard"){
+    return "Very hard practice was logged recently. Watch soreness and avoid stacking too many hard days.";
+  }
+
+  if(plan.type === "recovery"){
+    return "Today is designed to help the body absorb training and get faster later.";
+  }
+
+  return "Follow today’s plan. The app will adjust advice based on coach practices and recovery history.";
 }
 
-function resetToday(){
- localStorage.removeItem(todayKey());
- loadToday();
+function startSession(){
+  const plan = getPlan(selectedDate);
+  const key = dateKey(selectedDate);
+
+  let html = `
+    <div class="card">
+      <h2>Start Session</h2>
+      <div class="step">
+        <h3>Step 1: Readiness</h3>
+        <select id="sleep"><option value="5">Sleep Great</option><option value="4">Sleep Good</option><option value="3">Sleep Okay</option><option value="2">Sleep Poor</option></select>
+        <select id="soreness"><option value="5">Soreness None</option><option value="4">Soreness Light</option><option value="3">Soreness Moderate</option><option value="2">Soreness Heavy</option></select>
+        <select id="energy"><option value="5">Energy High</option><option value="4">Energy Good</option><option value="3">Energy Okay</option><option value="2">Energy Low</option></select>
+      </div>
+
+      <div class="step">
+        <h3>Step 2: Today's Work</h3>
+        ${plan.work.map((x,i)=>`<label><input type="checkbox" id="task${i}"> ${x}</label><br><br>`).join("")}
+      </div>
+
+      <textarea id="notes" placeholder="Notes: how did the session feel?"></textarea>
+      <button class="btn good" onclick="completeSession()">Finish & Save</button>
+    </div>
+  `;
+
+  document.getElementById("sessionArea").innerHTML = html;
 }
 
-function saveReadiness(){
- const sleep = Number(document.getElementById("sleep").value);
- const soreness = Number(document.getElementById("soreness").value);
- const energy = Number(document.getElementById("energy").value);
- const score = Math.round(((sleep+soreness+energy)/15)*100);
+function completeSession(){
+  const key = dateKey(selectedDate);
+  const sleep = Number(document.getElementById("sleep").value);
+  const soreness = Number(document.getElementById("soreness").value);
+  const energy = Number(document.getElementById("energy").value);
+  const readiness = Math.round(((sleep+soreness+energy)/15)*100);
+  const notes = document.getElementById("notes").value;
+  const plan = getPlan(selectedDate);
 
- let logs = JSON.parse(localStorage.getItem("readiness") || "[]");
- logs.push({date:todayKey(),score});
- localStorage.setItem("readiness",JSON.stringify(logs));
+  let logs = getLogs();
+  logs = logs.filter(l=>l.date!==key);
 
- let msg = "Readiness Score: " + score + "%. ";
- if(score>=80) msg += "Green light.";
- else if(score>=60) msg += "Train smart.";
- else msg += "Recovery warning. Reduce intensity.";
+  logs.push({
+    date:key,
+    completed:true,
+    coach:false,
+    phase:plan.phase,
+    focus:plan.focus,
+    readiness,
+    notes
+  });
 
- document.getElementById("readinessResult").innerText = msg;
- loadProgress();
+  saveLogs(logs);
+  alert("Saved. Great job Katie.");
+  openDay(selectedDate);
+}
+
+function showCoachLog(){
+  document.getElementById("coachDateText").innerText =
+    selectedDate.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+  showScreen("coachScreen");
 }
 
 function saveCoachLog(){
- const type = document.getElementById("coachType").value;
- const intensity = document.getElementById("coachIntensity").value;
- const duration = document.getElementById("coachDuration").value;
- const notes = document.getElementById("coachNotes").value;
+  const key = dateKey(selectedDate);
+  const type = document.getElementById("coachType").value;
+  const intensity = document.getElementById("coachIntensity").value;
+  const duration = document.getElementById("coachDuration").value;
+  const notes = document.getElementById("coachNotes").value;
 
- let logs = JSON.parse(localStorage.getItem("coachLogs") || "[]");
- logs.unshift({date:todayKey(),type,intensity,duration,notes});
- localStorage.setItem("coachLogs",JSON.stringify(logs));
+  let logs = getLogs();
+  logs = logs.filter(l=>l.date!==key);
 
- document.getElementById("coachDuration").value="";
- document.getElementById("coachNotes").value="";
- loadCoachLogs();
- alert("Coach practice saved.");
-}
+  logs.push({
+    date:key,
+    completed:true,
+    coach:true,
+    coachType:type,
+    intensity,
+    duration,
+    notes
+  });
 
-function loadCoachLogs(){
- const logs = JSON.parse(localStorage.getItem("coachLogs") || "[]");
- document.getElementById("coachLogList").innerHTML = logs.slice(0,8).map(l=>`
- <div class="item" style="display:block">
- <b>${l.date}</b><br>
- ${l.type} • ${l.intensity}<br>
- <span class="small">${l.duration}</span><br>
- <span class="small">${l.notes}</span>
- </div>`).join("") || "<p class='small'>No coach practices logged yet.</p>";
-}
+  saveLogs(logs);
 
-function smartSuggestion(){
- const logs = JSON.parse(localStorage.getItem("coachLogs") || "[]");
- const recent = logs[0];
- const data = getTodayPlan();
- let suggestion = data.message;
+  document.getElementById("coachDuration").value="";
+  document.getElementById("coachNotes").value="";
 
- if(recent && recent.date === todayKey()){
-   suggestion = "Coach practice was logged today. Do not double up hard training.";
- } else if(recent && (recent.intensity==="Hard" || recent.intensity==="Very Hard")){
-   suggestion = "Recent coach practice was hard. Consider lighter recovery or mobility.";
- }
-
- document.getElementById("coachSuggestion").innerText = suggestion;
-}
-
-function saveTest(){
- const name = document.getElementById("testName").value;
- const result = document.getElementById("testResult").value;
- if(!name || !result){alert("Enter test and result.");return;}
-
- let tests = JSON.parse(localStorage.getItem("tests") || "[]");
- tests.unshift({date:todayKey(),name,result});
- localStorage.setItem("tests",JSON.stringify(tests));
-
- document.getElementById("testName").value="";
- document.getElementById("testResult").value="";
- loadProgress();
+  alert("Coach practice saved.");
+  openDay(selectedDate);
 }
 
 function loadProgress(){
- const completed = JSON.parse(localStorage.getItem("completedDays") || "[]");
- const coachLogs = JSON.parse(localStorage.getItem("coachLogs") || "[]");
- const readiness = JSON.parse(localStorage.getItem("readiness") || "[]");
- const tests = JSON.parse(localStorage.getItem("tests") || "[]");
+  const logs = getLogs().sort((a,b)=>b.date.localeCompare(a.date));
+  const completed = logs.filter(l=>l.completed).length;
+  const coach = logs.filter(l=>l.coach).length;
+  const avg = logs.filter(l=>l.readiness).length ?
+    Math.round(logs.filter(l=>l.readiness).reduce((a,b)=>a+b.readiness,0)/logs.filter(l=>l.readiness).length) : 0;
 
- document.getElementById("daysDone").innerText = completed.length;
- document.getElementById("coachDays").innerText = coachLogs.length;
- document.getElementById("testsCount").innerText = tests.length;
+  document.getElementById("progressSummary").innerHTML =
+    `Days Completed: <b>${completed}</b><br>Coach Practices: <b>${coach}</b><br>Average Readiness: <b>${avg}%</b>`;
 
- let avg = 0;
- if(readiness.length){
-   avg = Math.round(readiness.reduce((a,b)=>a+b.score,0)/readiness.length);
- }
- document.getElementById("readinessAvg").innerText = avg + "%";
-
- document.getElementById("testList").innerHTML = tests.map(t=>`
- <div class="item" style="display:block">
- <b>${t.date}</b><br>${t.name}: ${t.result}
- </div>`).join("") || "<p class='small'>No tests saved yet.</p>";
+  document.getElementById("recentLogs").innerHTML = logs.slice(0,10).map(l=>`
+    <div class="step">
+      <b>${l.date}</b><br>
+      ${l.coach ? "Coach Practice: "+l.coachType+" • "+l.intensity : l.focus}<br>
+      <span class="small">${l.notes || l.duration || ""}</span>
+    </div>
+  `).join("") || "<p class='small'>No logs yet.</p>";
 }
 
-loadToday();
-loadCoachLogs();
-loadProgress();
+renderCalendar();
 </script>
 
 </body>
